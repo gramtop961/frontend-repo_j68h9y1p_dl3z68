@@ -23,12 +23,16 @@ export default function Hero() {
       onMouseMove={handleMouseMove}
       className="relative min-h-[100dvh] w-full overflow-hidden bg-gradient-to-b from-rose-50 via-white to-rose-100"
     >
-      {/* 3D Background */}
-      <div className="absolute inset-0">
-        <Spline
-          scene="https://prod.spline.design/NkU9jwELyhlHLLJo/scene.splinecode"
-          style={{ width: '100%', height: '100%' }}
-        />
+      {/* 3D Background (mounted to avoid flashing/mismatch) */}
+      <div className="absolute inset-0 pointer-events-none" aria-hidden>
+        {mounted ? (
+          <Spline
+            scene="https://prod.spline.design/NkU9jwELyhlHLLJo/scene.splinecode"
+            style={{ width: '100%', height: '100%' }}
+          />
+        ) : (
+          <div className="h-full w-full bg-[radial-gradient(ellipse_at_center,rgba(255,192,203,0.35),rgba(255,255,255,0)_60%)]" />
+        )}
       </div>
 
       {/* Ambient shifting light overlay */}
@@ -92,7 +96,6 @@ export default function Hero() {
 }
 
 // Extra keyframes via Tailwind plugin-free utility
-// Add at runtime using a style tag so we avoid editing config
 if (typeof document !== 'undefined' && !document.getElementById('pulse-slow')) {
   const style = document.createElement('style');
   style.id = 'pulse-slow';
